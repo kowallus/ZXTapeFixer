@@ -4,6 +4,8 @@
 #define TapeFixH
 //---------------------------------------------------------------------------
 
+static const int SIGNAL_BUFFER_SIZE = 50;
+
 #include "ErrorsDumper.h"
 #include "DecodingLog.h"
 #include "TapeCoder.h"
@@ -12,8 +14,10 @@
 class TapeReconstructor {
 
 private:
-    int bytes;
+
     int blockPart;
+
+    // used in writeBit method:
     int XORByte;
     int olderByte;
     int lastByte;
@@ -21,18 +25,26 @@ private:
     int byte;
     int bit;
     int bitCount;
+    int bytes;
+    unsigned int lastSignalCount;
+
+    int signalType;
+
     int pulseCount;
     int badCount;
     unsigned int i;
-    int signalType;
-    unsigned int lastSignalCount;
 
-    void dodajBit(int bit, int fullSignal);
+    const int sigAvg = 30;
+    const int minGood = 29;
+
+    TapeCoder* destCoder;
+
+    void writeBit(int bit, int fullSignal);
 
 public:
-    TapeReconstructor(WaveFile* source, TapeCoder* destCoder, DecodingLog* decLog, ErrorsDumper* errDump, int leftDelay, bool leftChan, bool rightChan);
-    ~TapeReconstructor();
+    TapeReconstructor(WaveFile* source, TapeCoder* destCoder, DecodingLog* decLog, ErrorsDumper* errDump, int leftDelay);
 
+    ~TapeReconstructor();
 };
 
 #endif

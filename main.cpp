@@ -3,7 +3,7 @@
 #include <unistd.h>
 
 #include "utils/helper.h"
-//#include "tapefix.h"
+#include "tapefix.h"
 
 using namespace std;
 
@@ -72,13 +72,24 @@ int main(int argc, char**argv) {
         file_name = file_name.substr(0, file_name.length() - 4);
     }
     string wav_in_file_name = file_name + WAV_EXTENSION;
-    string wav_out_file_name = file_name + APP_SUFFIX + WAV_EXTENSION;
+    string dest_file_name = file_name + APP_SUFFIX;
     string dump_file_name = file_name + APP_SUFFIX + TXT_EXTENSION;
     string err_file_name =  file_name + APP_SUFFIX + ERR_SUFFIX + TXT_EXTENSION;
 
     cout << "Processing tape: " << wav_in_file_name << endl;
 
-    cout << "Output tape: " << wav_out_file_name << endl;
+    WaveFile source;
+    if (!source.OpenRead(wav_in_file_name.c_str())) {
+        cerr << "Cannot open file: " << wav_in_file_name << "\n";
+        exit(EXIT_FAILURE);
+    }
+    TapeCoder coder(dest_file_name, source.GetSampleRate(), maxPauseInSeconds, splitOutputWavesOverMB);
+
+    TapeReconstructor(&source, &coder, 0, 0, 0);
+
+    source.Close();
+
+    cout << "Output tape: " << dest_file_name + WAV_EXTENSION << endl;
 
     return 0;
 }

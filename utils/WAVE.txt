@@ -279,7 +279,7 @@ Mixing two WAVE files together to a third:
 		if (i < in2.GetNumSamples())
 			in2.ReadSample(sample2);
 
-		out.WriteSample(sample1 / 2 + sample2 / 2);
+		out.writeSample(sample1 / 2 + sample2 / 2);
 	}
 
 

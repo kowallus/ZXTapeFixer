@@ -3,6 +3,7 @@
 
 #include <ctime>
 #include <string>
+#include <iostream>
 
 using namespace std;
 
@@ -15,5 +16,12 @@ string toString(long double value, unsigned char decimalPlaces);
 
 bool hasSuffix(const std::string &str, const std::string &suffix);
 
+class NullBuffer : public std::streambuf
+{
+public:
+    int overflow(int c) { return c; }
+};
+
+extern std::ostream nout;
 
 #endif // HELPER_H_INCLUDED

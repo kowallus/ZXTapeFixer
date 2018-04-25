@@ -2,6 +2,9 @@
 
 #include <sstream>
 
+NullBuffer null_buffer;
+std::ostream nout(&null_buffer);
+
 clock_t checkpoint;
 
 void clock_checkpoint() {

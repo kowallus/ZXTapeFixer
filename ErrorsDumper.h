@@ -3,7 +3,10 @@
 
 
 class ErrorsDumper {
-
+//    memoErr->Lines->SaveToFile(AnsiString(DestName)+"Err.log");
+public:
+    void logError(unsigned int currentSample, unsigned int destCurrentSample, unsigned int signalCount,
+                      unsigned int lastSignalCount, float zero, int bytes);
 };
 
 
