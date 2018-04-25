@@ -52,12 +52,12 @@ void TapeCoder::writeZero() {
     dest->WriteSample(0.0);
 }
 
-unsigned int TapeCoder::getDestOffset(unsigned int sourceOffset) {
-    return sourceOffset - currentAbsoluteStartOffset;
+string TapeCoder::getDestOffset(unsigned int sourceOffset) {
+    return (splitOutputWavesOverMB?"(" + getCurrentNameInfix() + ") ":"") + to_string(sourceOffset - currentAbsoluteStartOffset);
 }
 
 void TapeCoder::possibleSplit(unsigned int sourceOffset) {
-    if (splitOutputWavesOverMB && getDestOffset(sourceOffset) > splitOutputWavesOverMB * 1000000) {
+    if (splitOutputWavesOverMB && sourceOffset - currentAbsoluteStartOffset > splitOutputWavesOverMB * 1000000) {
         currentAbsoluteStartOffset = sourceOffset;
         dest->Close();
         openNewOutputDest();
@@ -65,7 +65,12 @@ void TapeCoder::possibleSplit(unsigned int sourceOffset) {
 }
 
 string TapeCoder::generateNextNameInfix() {
-    return splitOutputWavesOverMB?((++nrOrder < 10?"0":"") + to_string(nrOrder)):"";
+    ++nrOrder;
+    return getCurrentNameInfix();
+}
+
+string TapeCoder::getCurrentNameInfix() {
+    return splitOutputWavesOverMB?(nrOrder < 10?"0":"") + to_string(nrOrder):"";
 }
 
 void TapeCoder::openNewOutputDest() {

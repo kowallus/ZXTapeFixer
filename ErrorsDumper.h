@@ -1,12 +1,25 @@
 #ifndef ZXTAPERFIXER_ERRORSDUMPER_H
 #define ZXTAPERFIXER_ERRORSDUMPER_H
 
+#include <string>
+#include <fstream>
+
+using namespace std;
 
 class ErrorsDumper {
-//    memoErr->Lines->SaveToFile(AnsiString(DestName)+"Err.log");
+
+    std::fstream* fout;
+    std::ostream* out;
+
+    void dump(string txt);
+
 public:
-    void logError(unsigned int currentSample, unsigned int destCurrentSample, unsigned int signalCount,
-                      unsigned int lastSignalCount, float zero, int bytes);
+    ErrorsDumper(string fileName, std::ostream* out);
+
+    virtual ~ErrorsDumper();
+
+    void logError(unsigned int currentSample, string destCurrentSample, unsigned int signalCount,
+                  unsigned int lastSignalCount, float zero, int bytes);
 };
 
 

@@ -11,6 +11,7 @@ static const string APP_SUFFIX("_ZXTF");
 static const string ERR_SUFFIX("_err");
 static const string WAV_EXTENSION = ".wav";
 static const string TXT_EXTENSION = ".txt";
+static const string LOG_EXTENSION = ".log";
 
 int main(int argc, char**argv) {
 
@@ -74,9 +75,9 @@ int main(int argc, char**argv) {
     string wav_in_file_name = file_name + WAV_EXTENSION;
     string dest_file_name = file_name + APP_SUFFIX;
     string dump_file_name = file_name + APP_SUFFIX + TXT_EXTENSION;
-    string err_file_name =  file_name + APP_SUFFIX + ERR_SUFFIX + TXT_EXTENSION;
+    string err_file_name =  file_name + APP_SUFFIX + ERR_SUFFIX + LOG_EXTENSION;
 
-    cout << "Processing tape: " << wav_in_file_name << endl;
+    cout << "Processing tape: " << wav_in_file_name << " ... ";
 
     WaveFile source;
     if (!source.OpenRead(wav_in_file_name.c_str())) {
@@ -85,11 +86,14 @@ int main(int argc, char**argv) {
     }
     TapeCoder coder(dest_file_name, source.GetSampleRate(), maxPauseInSeconds, splitOutputWavesOverMB);
 
-    TapeReconstructor(&source, &coder, 0, 0, 0);
+    DecodingLog decLog(dump_file_name, verbose?&cout:&nout);
+    ErrorsDumper errDump(err_file_name, verbose?&cerr:&nout);
+
+    TapeReconstructor(&source, &coder, &decLog, &errDump, phaseShiftInSamples);
 
     source.Close();
 
-    cout << "Output tape: " << dest_file_name + WAV_EXTENSION << endl;
+    cout << "done!" << endl;
 
     return 0;
 }

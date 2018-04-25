@@ -1,21 +1,35 @@
 #include "DecodingLog.h"
 
-void DecodingLog::logBlockEnd(int lastByteEND, unsigned int destCurrentSample, int bytes, int lastByte, int XORByte,
+void DecodingLog::logBlockEnd(int lastByteEND, string destCurrentSample, int bytes, int lastByte, int XORByte,
                               int olderByte, int byte) {
-/*    memo->Lines->Add(AnsiString(lastByteEND) + "; " + AnsiString(destCurrentSample) + ": End of Block");
-    memo->Lines->Add(AnsiString("Bytes : ") + bytes);
-    memo->Lines->Add(AnsiString("XOR byte : ") + lastByte + ", should be : " + XORByte + "; older : " +
-                     olderByte);
+
+    string txt = to_string(lastByteEND) + "; " + destCurrentSample + ": End of Block\n";
+    txt +=  "Bytes : " + to_string(bytes) + "\n";
+    txt +=  "XOR byte : " + to_string(lastByte) + ", should be : " + to_string(XORByte) + "; older : " +
+            to_string(olderByte) + "\n";
     if ((lastByte != XORByte) && ((XORByte ^ lastByte) == olderByte))
-        memo->Lines->Add(AnsiString("Block byte too long :-)"));
-    memo->Lines->Add(AnsiString("next Byte : ") + byte);
-    memo->Lines->Add("");*/
+        txt += "Block byte too long :-)\n";
+    txt += "next Byte : " + to_string(byte) + "\n";
+    log(txt);
 }
 
-void DecodingLog::logBlockStart(unsigned int currentSample, unsigned int destCurrentSample) {
-//    memo->Lines->Add(AnsiString(currentSample) + "; " + AnsiString(destCurrentSample) + ": Start of block");
+void DecodingLog::logBlockStart(unsigned int currentSample, string destCurrentSample) {
+    log(to_string(currentSample) + "; " + destCurrentSample + ": Start of block");
 }
 
-void DecodingLog::logLargePulse(unsigned int currentSample, unsigned int destCurrentSample) {
-//    memo->Lines->Add(AnsiString(currentSample) + "; " + AnsiString(destCurrentSample) + ": Too large Sync Pulse?");
+void DecodingLog::logLargePulse(unsigned int currentSample, string destCurrentSample) {
+    log(to_string(currentSample) + "; " + destCurrentSample + ": Too large Sync Pulse?");
+}
+
+DecodingLog::DecodingLog(string fileName, std::ostream *out): out(out){
+    fout = new fstream(fileName.c_str(), ios::out | ios::binary | ios::app);
+}
+
+DecodingLog::~DecodingLog() {
+    delete fout;
+}
+
+void DecodingLog::log(string txt) {
+    *out << txt << endl;
+    *fout << txt << endl;
 }

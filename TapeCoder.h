@@ -18,6 +18,7 @@ private:
     int nrOrder = 0;
 
     string generateNextNameInfix();
+    string getCurrentNameInfix();
     void openNewOutputDest();
 
     int zerosCount = 0;
@@ -34,9 +35,10 @@ public:
 
     void writeZero();
 
-    unsigned int getDestOffset(unsigned int sourceOffset);
+    string getDestOffset(unsigned int sourceOffset);
 
     void possibleSplit(unsigned int sourceOffset);
+
 };
 
 
