@@ -1,0 +1,10 @@
+#ifndef ZXTAPERFIXER_TAPECODER_H
+#define ZXTAPERFIXER_TAPECODER_H
+
+
+class TapeCoder {
+
+};
+
+
+#endif //ZXTAPERFIXER_TAPECODER_H

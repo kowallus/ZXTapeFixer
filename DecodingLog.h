@@ -1,0 +1,10 @@
+#ifndef ZXTAPERFIXER_DECODINGLOG_H
+#define ZXTAPERFIXER_DECODINGLOG_H
+
+
+class DecodingLog {
+
+};
+
+
+#endif //ZXTAPERFIXER_DECODINGLOG_H
